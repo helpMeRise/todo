@@ -9,8 +9,8 @@ export const todo = () => {
   const base = {
     init() {
       this.todo = this.getTodoLS();
+      todoCounter();
     },
-    employee: 'Петров Сергей Иванович',
     todo: [],
     check(id) {
       for (let i = 0; i < this.todo.length; i++) {
@@ -30,6 +30,7 @@ export const todo = () => {
 
       this.todo.push(todo);
       this.setTodoLS();
+      todoCounter();
       return todo;
     },
     getTodoLS() {
@@ -70,15 +71,15 @@ export const todo = () => {
     } = objTodo;
 
     const todoItem = `
-    <article class="post ${ready ? 'post_complete' : ''}">
-      <h3 class="post__author">${author}</h3>
-      <p class="post__todo">${post}</p>
-      ${!ready ? 
-        `<button class="post__ready" type="button" data-id=${id}>✔</button>` :
-        ''
-      }    
-    </article>
-  `;
+      <article class="post ${ready ? 'post_complete' : ''}">
+        <h3 class="post__author">${author}</h3>
+        <p class="post__todo">${post}</p>
+        ${!ready ? 
+          `<button class="post__ready" type="button" data-id=${id}>✔</button>` :
+          ''
+        }    
+      </article>
+    `;
 
     const li = document.createElement('li');
     li.classList.add('todo__list-item')
@@ -104,6 +105,11 @@ export const todo = () => {
       const id = btn.dataset.id;
       base.check(id);
     }
+  }
+
+  const todoCounter = () => {
+    let todoCount = document.querySelector('.todo__count');
+    todoCount.textContent = base.todo.length;
   }
 
   todoForm.addEventListener('submit', addTodo);
