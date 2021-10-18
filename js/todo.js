@@ -10,15 +10,18 @@ export const todo = () => {
     init() {
       this.todo = this.getTodoLS();
       todoCounter();
+      
     },
     todo: [],
     check(id) {
       for (let i = 0; i < this.todo.length; i++) {
         if (this.todo[i].id === id) {
           this.todo[i].ready = true;
+          this.todo[i].btn = 'post__remove';
         }
-      }
-      this.setTodoLS();
+        this.setTodoLS();
+      }     
+      
     },
     addTodo(author, post) {
       const todo = {
@@ -26,6 +29,7 @@ export const todo = () => {
         author,
         post,
         ready: false,
+        btn: 'post__ready',
       };
 
       this.todo.push(todo);
@@ -67,17 +71,15 @@ export const todo = () => {
       ready,
       author,
       post,
-      id
+      id,
+      btn,
     } = objTodo;
 
     const todoItem = `
       <article class="post ${ready ? 'post_complete' : ''}">
         <h3 class="post__author">${author}</h3>
         <p class="post__todo">${post}</p>
-        ${!ready ? 
-          `<button class="post__ready" type="button" data-id=${id}>✔</button>` :
-          ''
-        }    
+        <button class="${btn}" type="button" data-id=${id}>✔</button>   
       </article>
     `;
 
@@ -100,13 +102,15 @@ export const todo = () => {
 
     if (btn) {
       const post = btn.closest('.post');
-      btn.remove();
+
+      btn.classList.add('post__remove');
       post.classList.add('post_complete');
       const id = btn.dataset.id;
       base.check(id);
     }
   }
 
+ 
   const todoCounter = () => {
     let todoCount = document.querySelector('.todo__count');
     todoCount.textContent = base.todo.length;
