@@ -49,6 +49,17 @@ export const todo = () => {
       localStorage.setItem('todo', JSON.stringify(this.todo))
     },
 
+    todoRemove(id) {  
+      for (let i = 0; i < this.todo.length; i++) {
+        if (this.todo[i].id === id) {
+          this.todo.splice(i, 1)
+          
+        }
+        this.setTodoLS();
+        
+      }
+    },
+
   };
 
 
@@ -99,6 +110,7 @@ export const todo = () => {
 
   const checkTodo = event => {
     const btn = event.target.closest('.post__ready');
+    const btnRemove = event.target.closest('.post__remove');
 
     if (btn) {
       const post = btn.closest('.post');
@@ -108,9 +120,17 @@ export const todo = () => {
       const id = btn.dataset.id;
       base.check(id);
     }
+
+    if (btnRemove) {
+
+      const card = btnRemove.closest('.todo__list-item');
+      const id = btnRemove.dataset.id;
+      card.remove();
+      base.todoRemove(id);
+      
+    }
   }
 
- 
   const todoCounter = () => {
     let todoCount = document.querySelector('.todo__count');
     todoCount.textContent = base.todo.length;
